@@ -22,5 +22,20 @@ namespace UnitTests
             Action action = () => Canvas.Create(width, height);
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
+
+        [Theory]
+        [InlineData(10, 10)]
+        [InlineData(1, 10)]
+        [InlineData(10, 1)]
+        [InlineData(300, 10)]
+        [InlineData(10, 300)]
+        [InlineData(300, 300)]
+        public void Create_Canvas_Successful(int width, int height)
+        {
+            var canvas = Canvas.Create(width, height);
+
+            canvas.Should().NotBeNull();
+            canvas.Should().BeOfType<Canvas>();
+        }
     }
 }
