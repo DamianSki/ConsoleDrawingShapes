@@ -31,6 +31,8 @@ namespace ConsoleDrawingShapes
             /// <param name="error"></param>
             private static void Logger(string error) => Console.WriteLine(error);
 
+            private static Canvas _canvas;
+
             private static (string operation, string[] attributes) ExtractActionWithAttributes(string line)
             {
                 return (string.Empty, new[] { string.Empty, string.Empty });
@@ -43,10 +45,50 @@ namespace ConsoleDrawingShapes
 
                 switch (operation.ToLower()) {
                     case "c":
+                        CreateCanvas(operation, attributes);
+                        break;
+                    case "l":
+                        DrawLine(operation, attributes);
+                        break;
+                    case "r":
+                        DrawRectangle(operation, attributes);
+                        break;
+                    case "b":
+                        throw new InvalidOperationException("Operation not supported!");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException("Unknown operation!");
                 }                    
+            }
+
+            private static void CreateCanvas(string operation, string[] attributes)
+            {
+                if (attributes.Length != 2 || !int.TryParse(attributes[0], out int width) || !int.TryParse(attributes[0], out int height))
+                    throw new ArgumentOutOfRangeException("Create canvas incorrect attributes!");
+
+                _canvas = Canvas.Create(width, height);
+            }
+
+            private static void DrawLine(string operation, string[] attributes)
+            {
+                if (_canvas == null)
+                    throw new Exception("Canvas must be created before!");
+
+                if (attributes.Length != 2 || !int.TryParse(attributes[0], out int width) || !int.TryParse(attributes[0], out int height))
+                    throw new ArgumentOutOfRangeException("Create canvas incorrect attributes!");
+
+                _canvas.DrawLine(1, 1, 1, 1);
+            }
+
+            private static void DrawRectangle(string operation, string[] attributes)
+            {
+                if (_canvas == null)
+                    throw new Exception("Canvas must be created before!");
+
+                if (attributes.Length != 2 || !int.TryParse(attributes[0], out int width) || !int.TryParse(attributes[0], out int height))
+                    throw new ArgumentOutOfRangeException("Create canvas incorrect attributes!");
+
+                _canvas.DrawRectangle(1, 1, 1, 1);
             }
 
             public static bool Execute(string line)
