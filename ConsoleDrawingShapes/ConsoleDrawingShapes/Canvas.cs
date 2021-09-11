@@ -45,7 +45,7 @@ namespace ConsoleDrawingShapes
 
         }
 
-        private void DrawPoint(int x, int y, char color = DefaultColor)
+        private void DrawPoint(int x, int y, char color)
         {
 
         }
