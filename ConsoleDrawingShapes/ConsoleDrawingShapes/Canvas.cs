@@ -30,24 +30,26 @@ namespace ConsoleDrawingShapes
         /// <param name="heigh">The maximum width is 300</param>
         public static Canvas Create(int width, int heigh) => new Canvas(width, heigh);
 
-        public void DrawLine(int x1, int y1, int x2, int y2, char color = DefaultColor)
-        {
-            var line = new Line(x1, y1, x2, y2, color);
-        }
+        public void DrawLine(int x1, int y1, int x2, int y2, char color = DefaultColor) => 
+            DrawPoints(new Line(x1, y1, x2, y2, color).Draw());
 
-        public void DrawRectangle(int x1, int y1, int x2, int y2, char color = DefaultColor)
-        {
-
-        }
+        public void DrawRectangle(int x1, int y1, int x2, int y2, char color = DefaultColor) =>
+            DrawPoints(new Rectangle(x1, y1, x2, y2, color).Draw());
 
         public void Fill(int x, int y, char color = DefaultColor)
         {
 
         }
 
-        private void DrawPoint(int x, int y, char color)
+        private void DrawPoints(Point[] points)
         {
+            throw new NotImplementedException();
+            Validate(points);
+        }
 
+        private void Validate(Point[] points)
+        {
+            throw new NotImplementedException();   
         }
     }
 }

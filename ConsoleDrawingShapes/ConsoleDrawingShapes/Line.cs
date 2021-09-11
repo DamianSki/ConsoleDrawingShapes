@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ConsoleDrawingShapes.Extensions;
+using System;
 using System.Linq;
 
 namespace ConsoleDrawingShapes
@@ -27,7 +27,7 @@ namespace ConsoleDrawingShapes
                 var start = Y2 > Y1 ? Y1 : Y2;
                 var end = Y2 < Y1 ? Y1 : Y2;
 
-                return Range(start, end).Select(y => new Point(X1, y, Color)).ToArray();
+                return (start, end).Range().Select(y => new Point(X1, y, Color)).ToArray();
             }
 
             if (Y1 == Y2)
@@ -35,16 +35,10 @@ namespace ConsoleDrawingShapes
                 var start = X2 > X1 ? X1 : X2;
                 var end = X2 < X1 ? X1 : X2;
                 
-                return Range(start, end).Select(x => new Point(x, Y1, Color)).ToArray();
+                return (start, end).Range().Select(x => new Point(x, Y1, Color)).ToArray();
             }
 
             throw new NotImplementedException();
-        }
-
-        private IEnumerable<int> Range(int start, int end)
-        {
-            for (int i = start; i <= end; i++)
-                yield return i;
         }
     }
 }
