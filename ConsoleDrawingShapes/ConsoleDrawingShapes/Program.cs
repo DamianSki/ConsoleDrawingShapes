@@ -62,7 +62,6 @@ namespace ConsoleDrawingShapes
                     if (_canvas == null)
                         throw new Exception("Canvas must be created before!");
                 }
-
                 void ValidationPolicy2(string a1, string a2, string a3, string a4)
                 {
                     if (attributes.Length != 4
@@ -71,7 +70,7 @@ namespace ConsoleDrawingShapes
                         || !int.TryParse(a3, out int x2)
                         || !int.TryParse(a4, out int y2))
                         throw new ArgumentException("Incorect attributes!");
-                }
+                }        
 
                 /// <summary>
                 /// This is command type in this simple example it is just method
@@ -125,6 +124,22 @@ namespace ConsoleDrawingShapes
                     return _canvas;
                 }
 
+                Canvas FillPolygon(string[] attributes)
+                {
+                    ValidationPolicy1();
+
+                    if (attributes.Length != 3
+                        || !int.TryParse(attributes[0], out int x1)
+                        || !int.TryParse(attributes[1], out int y1))
+                        throw new ArgumentException("Incorect attributes!");
+
+                    var color = attributes[2].ToCharArray()[0];
+
+                    _canvas.Fill(x1, y1, color);
+
+                    return _canvas;
+                }
+
                 //Commands factory
                 Canvas CommandsInterpreter(string action, string[] attributes)
                 {
@@ -133,7 +148,7 @@ namespace ConsoleDrawingShapes
                         "c" => CreateCanvas(attributes),
                         "l" => DrawLine(attributes),
                         "r" => DrawRectangle(attributes),
-                        "b" => throw new InvalidOperationException("Operation not supported!"),
+                        "b" => FillPolygon(attributes),
                         _ => throw new ArgumentOutOfRangeException("Unknown operation!")
                     };
                 }

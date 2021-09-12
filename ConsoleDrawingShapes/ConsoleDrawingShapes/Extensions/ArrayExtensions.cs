@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ConsoleDrawingShapes.Extensions
 {
-    internal static class Extensions
+    internal static class ArrayExtensions
     {
         public static T[] SubArray<T>(this T[] array, int offset, int length)
         {
@@ -20,6 +20,23 @@ namespace ConsoleDrawingShapes.Extensions
             }
 
             return sb.ToString();
+        }
+
+        public static T[][] ToCompoundArray<T>(this T[,] array)
+        {
+            var heigh = array.GetUpperBound(0) + 1;
+            var width = array.GetUpperBound(1) + 1;
+
+            var copy = new T[heigh][];
+
+            for (int x = 0; x < heigh; x++)
+            {
+                copy[x] = new T[width];
+                for (int y = 0; y < width; y++)
+                    copy[x][y] = array[x, y];
+            }
+
+            return copy;
         }
     }
 }
