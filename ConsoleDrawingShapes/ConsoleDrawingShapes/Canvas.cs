@@ -51,21 +51,7 @@ namespace ConsoleDrawingShapes
             return content;
         }
 
-        public char[][] Render()
-        {
-            return _content.ToCompoundArray();
-            ////super advanced, difficult and top secret rendering algorithm
-            //var copy = new char[_height][];
-
-            //for (int x = 0; x < _height; x++)
-            //{
-            //    copy[x] = new char[_width];
-            //    for (int y = 0; y < _width; y++)
-            //        copy[x][y] = _content[x, y];
-            //}
-
-            //return copy;
-        }
+        public char[][] Render() => _content.ToCompoundArray();
 
         /// <summary>
         /// Create canvas with specified with and heigh.
