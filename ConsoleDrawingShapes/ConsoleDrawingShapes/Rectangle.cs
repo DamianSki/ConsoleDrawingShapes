@@ -25,8 +25,6 @@ namespace ConsoleDrawingShapes
             var yTop = Y1 < Y2 ? Y1 : Y2;
             var yBottom = Y1 > Y2 ? Y1 : Y2;
 
-            //var horizontalLines = (xLeft, xRight).Range().SelectMany(x => new[] { new Point(x, yTop, Color), new Point(x, yBottom, Color) });
-
             var topHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(yTop, x, Color));                        
             var bottomHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(yBottom, x, Color));
 

@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleDrawingShapes
 {
     public sealed class Canvas
     {
-        private Canvas(int width, int height) 
-        {            
+        private Canvas(int width, int height)
+        {
             if (width < 1 || width > maxWidth || height < 1 || height > maxHeigh)
                 throw new ArgumentOutOfRangeException("Canvas max width: 300, heigh: 300!");
 
@@ -16,15 +17,17 @@ namespace ConsoleDrawingShapes
             _content = InitContent(_width, _height);
         }
 
+        I2DGraphicsAlgorithms _algorithms = new Graphics2DAlgorithms();
+
         private const int maxWidth = 300;
         private const int maxHeigh = 300;
 
         private readonly int _width;
         private readonly int _height;
-        private readonly char[, ] _content;
+        private readonly char[,] _content;
         private const char DefaultColor = 'x';
 
-        private char[, ] InitContent(int width, int height)
+        private char[,] InitContent(int width, int height)
         {
             var content = new char[height, width];
 
@@ -43,7 +46,7 @@ namespace ConsoleDrawingShapes
                 content[y, 0] = '|';
                 content[y, width - 1] = '|';
             }
-                       
+
 
             return content;
         }
@@ -62,7 +65,6 @@ namespace ConsoleDrawingShapes
 
             return copy;
         }
-
         /// <summary>
         /// Create canvas with specified with and heigh.
         /// </summary>
@@ -70,7 +72,7 @@ namespace ConsoleDrawingShapes
         /// <param name="heigh">The maximum width is 300</param>
         public static Canvas Create(int width, int heigh) => new Canvas(width, heigh);
 
-        public void DrawLine(int x1, int y1, int x2, int y2, char color = DefaultColor) => 
+        public void DrawLine(int x1, int y1, int x2, int y2, char color = DefaultColor) =>
             Draw(new Line(x1, y1, x2, y2, color).Draw());
 
         public void DrawRectangle(int x1, int y1, int x2, int y2, char color = DefaultColor) =>
@@ -86,8 +88,8 @@ namespace ConsoleDrawingShapes
         /// </summary>
         /// <param name="points"></param>
         private void Draw(Point[] points)
-        {            
-            Validate(points);            
+        {
+            Validate(points);
             points.ToList().ForEach(p => _content[p.X, p.Y] = p.Color);
         }
 
@@ -105,6 +107,76 @@ namespace ConsoleDrawingShapes
 
             if (xMin < 1 || xMax > maxWidth || yMin < 1 || yMax > maxHeigh)
                 throw new InvalidOperationException($"Figur sizes excedeed max canvas sizes widht: {_width} height: {_height}");
+        }                
+    }
+
+    internal interface I2DGraphicsAlgorithms
+    {
+        IList<Point> FindNeigbouhrPoints(int x, int y, char[][] canvas);
+    }
+
+    internal class Graphics2DAlgorithms : I2DGraphicsAlgorithms
+    {
+        public IList<Point> FindNeigbouhrPoints(int x, int y, char [][] canvas)
+        {
+            var canvasMaxWidth = canvas[0].Length - 1;
+            var canvasMinWidth = 1;
+            var canvasMaxHeight = canvas.Length - 1;
+            var canvasMinHeight = 1;
+
+            var result = new List<Point>();
+            var visited = new bool[canvas.Length][];
+
+            for (int i = 0; i < canvas.Length; i++)
+                visited[i] = new bool[canvas[0].Length];
+
+            result.Add(new Point(x, y, canvas[x][y]));
+            visited[x][y] = true;
+
+            var stack = new Stack<Point>();
+            stack.Push(result[0]);
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                var currX = current.X;
+                var currY = current.Y;
+                var currColor = current.Color;
+
+                if (currX + 1 < canvasMaxHeight && currColor ==  canvas[currX + 1][currY] && !visited[currX + 1][currY]) //go right
+                {
+                    visited[currX + 1][currY] = true;
+                    var point = new Point(currX + 1, currY, currColor);
+                    stack.Push(point);
+                    result.Add(point);
+                }
+
+                if (currX - 1 >= canvasMinWidth && currColor == canvas[currX - 1][currY] && !visited[currX - 1][currY]) //go left
+                {
+                    visited[currX - 1][currY] = true;
+                    var point = new Point(currX - 1, currY, currColor);
+                    stack.Push(point);
+                    result.Add(point);
+                }
+
+                if (currY + 1 < canvasMaxWidth && currColor == canvas[currX][currY + 1] && !visited[currX][currY + 1]) //go bottom
+                {
+                    visited[currX][currY + 1] = true;
+                    var point = new Point(currX, currY + 1, currColor);
+                    stack.Push(point);
+                    result.Add(point);
+                }
+
+                if (currY - 1 >= canvasMinHeight && currColor == canvas[currX][currY - 1] && !visited[currX][currY - 1]) //go top
+                {
+                    visited[currX][currY - 1] = true;
+                    var point = new Point(currX, currY - 1, currColor);
+                    stack.Push(point);
+                    result.Add(point);
+                }
+            }
+
+            return result;
         }
     }
 }
