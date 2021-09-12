@@ -22,14 +22,16 @@ namespace ConsoleDrawingShapes
             var xLeft = X1 < X2 ? X1 : X2;
             var xRight = X1 > X2 ? X1 : X2;
 
-            var yTop = Y1 > Y2 ? Y1 : Y2;
-            var yBottom = Y1 < Y2 ? Y1 : Y2;            
+            var yTop = Y1 < Y2 ? Y1 : Y2;
+            var yBottom = Y1 > Y2 ? Y1 : Y2;
 
-            var topHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(x, yTop, Color));                        
-            var bottomHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(x, yBottom, Color));
+            //var horizontalLines = (xLeft, xRight).Range().SelectMany(x => new[] { new Point(x, yTop, Color), new Point(x, yBottom, Color) });
 
-            var lefVerticalLine = (yBottom + 1, yTop - 1).Range().Select(y => new Point(xLeft, y, Color));
-            var rightVerticalLine = (yBottom + 1, yTop - 1).Range().Select(y => new Point(xRight, y, Color));
+            var topHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(yTop, x, Color));                        
+            var bottomHorizontalLine = (xLeft, xRight).Range().Select(x => new Point(yBottom, x, Color));
+
+            var lefVerticalLine = (yTop + 1, yBottom - 1).Range().Select(y => new Point(y, xLeft,  Color));
+            var rightVerticalLine = (yTop + 1, yBottom - 1).Range().Select(y => new Point(y, xRight, Color));
 
             return topHorizontalLine.Concat(bottomHorizontalLine).Concat(lefVerticalLine).Concat(rightVerticalLine).ToArray();
         }        

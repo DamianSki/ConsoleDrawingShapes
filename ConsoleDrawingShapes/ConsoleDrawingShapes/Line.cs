@@ -27,7 +27,7 @@ namespace ConsoleDrawingShapes
                 var start = Y2 > Y1 ? Y1 : Y2;
                 var end = Y2 < Y1 ? Y1 : Y2;
 
-                return (start, end).Range().Select(y => new Point(X1, y, Color)).ToArray();
+                return (start, end).Range().Select(y => new Point(y, X1, Color)).ToArray();
             }
 
             if (Y1 == Y2)
@@ -35,7 +35,7 @@ namespace ConsoleDrawingShapes
                 var start = X2 > X1 ? X1 : X2;
                 var end = X2 < X1 ? X1 : X2;
                 
-                return (start, end).Range().Select(x => new Point(x, Y1, Color)).ToArray();
+                return (start, end).Range().Select(x => new Point(Y1, x, Color)).ToArray();
             }
 
             throw new NotImplementedException();
